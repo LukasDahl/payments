@@ -2,20 +2,20 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.services;
+package payments.businesslogic.services;
 
-import org.gr15.businesslogic.Interfaces.IBankService;
-import org.gr15.businesslogic.Interfaces.IPaymentService;
-import org.gr15.businesslogic.Interfaces.IQueueService;
-import org.gr15.businesslogic.exceptions.DtuPaySystemError;
-import org.gr15.businesslogic.exceptions.MerchantNotFound;
-import org.gr15.businesslogic.exceptions.TokenAlreadyUsed;
-import org.gr15.businesslogic.exceptions.TokenNotFound;
-import org.gr15.businesslogic.models.Account;
-import org.gr15.businesslogic.models.Payment;
-import org.gr15.businesslogic.models.TokenInfo;
-import org.gr15.businesslogic.models.Transaction;
-import org.gr15.repository.IPaymentRepository;
+import payments.businesslogic.Interfaces.IBankService;
+import payments.businesslogic.Interfaces.IPaymentService;
+import payments.businesslogic.Interfaces.IQueueService;
+import payments.businesslogic.exceptions.DtuPaySystemError;
+import payments.businesslogic.exceptions.MerchantNotFound;
+import payments.businesslogic.exceptions.TokenAlreadyUsed;
+import payments.businesslogic.exceptions.TokenNotFound;
+import payments.businesslogic.models.Account;
+import payments.businesslogic.models.Payment;
+import payments.businesslogic.models.TokenInfo;
+import payments.businesslogic.models.Transaction;
+import payments.repository.IPaymentRepository;
 
 public class PaymentService implements IPaymentService {
 

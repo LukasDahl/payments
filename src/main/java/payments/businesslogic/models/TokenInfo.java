@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.models;
+package payments.businesslogic.models;
 
 public class TokenInfo {
     public String Token;

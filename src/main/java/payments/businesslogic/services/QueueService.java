@@ -2,11 +2,11 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.services;
+package payments.businesslogic.services;
 
-import org.gr15.businesslogic.Interfaces.IQueueService;
-import org.gr15.businesslogic.models.TokenInfo;
-import org.gr15.businesslogic.models.Transaction;
+import payments.businesslogic.Interfaces.IQueueService;
+import payments.businesslogic.models.TokenInfo;
+import payments.businesslogic.models.Transaction;
 
 public class QueueService implements IQueueService {
 

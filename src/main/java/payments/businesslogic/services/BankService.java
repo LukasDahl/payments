@@ -2,9 +2,9 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.services;
+package payments.businesslogic.services;
 
-import org.gr15.businesslogic.Interfaces.IBankService;
+import payments.businesslogic.Interfaces.IBankService;
 
 public class BankService implements IBankService {
 

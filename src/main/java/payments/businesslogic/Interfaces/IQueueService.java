@@ -2,10 +2,10 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.Interfaces;
+package payments.businesslogic.Interfaces;
 
-import org.gr15.businesslogic.models.TokenInfo;
-import org.gr15.businesslogic.models.Transaction;
+import payments.businesslogic.models.TokenInfo;
+import payments.businesslogic.models.Transaction;
 
 public interface IQueueService {
     void publishTransactionCreatedEvent(Transaction transaction);

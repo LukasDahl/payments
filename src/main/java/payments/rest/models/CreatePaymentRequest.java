@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.rest.models;
+package payments.rest.models;
 
 import javax.json.bind.annotation.JsonbCreator;
 import javax.json.bind.annotation.JsonbProperty;

@@ -2,15 +2,15 @@
  * @author Wassim
  */
 
-package org.gr15.repository;
+package payments.repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gr15.businesslogic.enums.AccountType;
-import org.gr15.businesslogic.models.Account;
-import org.gr15.businesslogic.models.TokenInfo;
-import org.gr15.businesslogic.models.Transaction;
+import payments.businesslogic.enums.AccountType;
+import payments.businesslogic.models.Account;
+import payments.businesslogic.models.TokenInfo;
+import payments.businesslogic.models.Transaction;
 
 public class InMemoryPaymentRepository implements IPaymentRepository {
 

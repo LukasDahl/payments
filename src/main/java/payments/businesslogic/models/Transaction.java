@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.models;
+package payments.businesslogic.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

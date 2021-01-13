@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.rest.models;
+package payments.rest.models;
 
 public class ErrorModel {
     public String Message;

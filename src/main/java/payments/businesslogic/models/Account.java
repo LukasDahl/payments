@@ -2,9 +2,9 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.models;
+package payments.businesslogic.models;
 
-import org.gr15.businesslogic.enums.AccountType;
+import payments.businesslogic.enums.AccountType;
 
 public class Account {
     public AccountType Type;

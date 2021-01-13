@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.rest.api;
+package payments.rest.api;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -11,18 +11,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.gr15.businesslogic.Interfaces.IPaymentService;
-import org.gr15.businesslogic.exceptions.DtuPaySystemError;
-import org.gr15.businesslogic.exceptions.MerchantNotFound;
-import org.gr15.businesslogic.exceptions.TokenAlreadyUsed;
-import org.gr15.businesslogic.exceptions.TokenNotFound;
-import org.gr15.businesslogic.models.Payment;
-import org.gr15.businesslogic.services.BankService;
-import org.gr15.businesslogic.services.PaymentService;
-import org.gr15.businesslogic.services.QueueService;
-import org.gr15.repository.InMemoryPaymentRepository;
-import org.gr15.rest.models.CreatePaymentRequest;
-import org.gr15.rest.models.ErrorModel;
+import payments.businesslogic.Interfaces.IPaymentService;
+import payments.businesslogic.exceptions.DtuPaySystemError;
+import payments.businesslogic.exceptions.MerchantNotFound;
+import payments.businesslogic.exceptions.TokenAlreadyUsed;
+import payments.businesslogic.exceptions.TokenNotFound;
+import payments.businesslogic.models.Payment;
+import payments.businesslogic.services.BankService;
+import payments.businesslogic.services.PaymentService;
+import payments.businesslogic.services.QueueService;
+import payments.repository.InMemoryPaymentRepository;
+import payments.rest.models.CreatePaymentRequest;
+import payments.rest.models.ErrorModel;
 
 @Path("/payments")
 public class PaymentsResource {

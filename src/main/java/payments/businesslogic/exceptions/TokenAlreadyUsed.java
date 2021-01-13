@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package org.gr15.businesslogic.exceptions;
+package payments.businesslogic.exceptions;
 
 public class TokenAlreadyUsed extends Exception {
 
