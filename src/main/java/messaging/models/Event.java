@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package payments.messaging.models;
+package messaging.models;
 
 public class Event {
 

@@ -2,15 +2,15 @@
  * @author Wassim
  */
 
-package payments.messaging.rabbitmq;
+package messaging.rabbitmq;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 
-import payments.messaging.interfaces.IEventSender;
-import payments.messaging.models.Event;
+import messaging.interfaces.IEventSender;
+import messaging.models.Event;
 
 public class RabbitMqSender implements IEventSender {
 

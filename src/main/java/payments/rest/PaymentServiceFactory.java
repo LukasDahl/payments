@@ -4,13 +4,13 @@
 
 package payments.rest;
 
-import payments.businesslogic.Interfaces.IBankService;
+import bankservice.BankService;
+import bankservice.BankServiceService;
+import messaging.rabbitmq.RabbitMqListener;
+import messaging.rabbitmq.RabbitMqSender;
 import payments.businesslogic.Interfaces.IPaymentService;
-import payments.businesslogic.services.BankService;
 import payments.businesslogic.services.PaymentService;
 import payments.businesslogic.services.QueueService;
-import payments.messaging.rabbitmq.RabbitMqListener;
-import payments.messaging.rabbitmq.RabbitMqSender;
 import payments.repository.IPaymentRepository;
 import payments.repository.InMemoryPaymentRepository;
 
@@ -31,7 +31,7 @@ public class PaymentServiceFactory {
             return paymentService;
         }
 
-        IBankService bankService = new BankService();
+        BankService bankService = new BankServiceService().getBankServicePort();
         QueueService queueService = new QueueService(new RabbitMqSender());
         IPaymentRepository paymentRepository = new InMemoryPaymentRepository();
 

@@ -2,9 +2,9 @@
  * @author Wassim
  */
 
-package payments.messaging.interfaces;
+package messaging.interfaces;
 
-import payments.messaging.models.Event;
+import messaging.models.Event;
 
 public interface IEventReceiver {
     void receiveEvent(Event event) throws Exception;

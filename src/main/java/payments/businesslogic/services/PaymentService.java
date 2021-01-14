@@ -4,7 +4,8 @@
 
 package payments.businesslogic.services;
 
-import payments.businesslogic.Interfaces.IBankService;
+import bankservice.BankService;
+import bankservice.BankServiceException_Exception;
 import payments.businesslogic.Interfaces.IPaymentService;
 import payments.businesslogic.Interfaces.IQueueService;
 import payments.businesslogic.exceptions.DtuPaySystemException;
@@ -20,19 +21,19 @@ import payments.repository.IPaymentRepository;
 
 public class PaymentService implements IPaymentService {
 
-    private IBankService bankService;
+    private BankService bankService;
     private IQueueService queueService;
     private IPaymentRepository paymentRepository;
 
-    public PaymentService(IPaymentRepository paymentRepository, IBankService bankService, IQueueService queueService) {
+    public PaymentService(IPaymentRepository paymentRepository, BankService bankService, IQueueService queueService) {
         this.bankService = bankService;
         this.queueService = queueService;
         this.paymentRepository = paymentRepository;
     }
 
     @Override
-    public void createPayment(Payment payment)
-            throws MerchantNotFound, TokenNotFound, DtuPaySystemException, TokenAlreadyUsed, QueueException {
+    public void createPayment(Payment payment) throws MerchantNotFound, TokenNotFound, DtuPaySystemException,
+            TokenAlreadyUsed, QueueException, BankServiceException_Exception {
 
         // 1. check token and get customer account Id
         TokenInfo tokenInfo = this.queueService.validateToken(payment.Token);
@@ -56,8 +57,8 @@ public class PaymentService implements IPaymentService {
         }
 
         // 4. call bank
-        this.bankService.transferMoney(merchantAccount.BankAccountId, customerAccount.BankAccountId, payment.Amount,
-                payment.Description);
+        this.bankService.transferMoneyFromTo(customerAccount.BankAccountId, merchantAccount.BankAccountId,
+                payment.Amount, payment.Description);
 
         // 5. create a transaction
         Transaction transaction = new Transaction(payment.Amount, payment.Token, merchantAccount.AccountId,

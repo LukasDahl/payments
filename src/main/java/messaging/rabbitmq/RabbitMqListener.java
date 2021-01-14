@@ -2,7 +2,7 @@
  * @author Wassim
  */
 
-package payments.messaging.rabbitmq;
+package messaging.rabbitmq;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.Channel;
@@ -10,8 +10,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-import payments.messaging.interfaces.IEventReceiver;
-import payments.messaging.models.Event;
+import messaging.interfaces.IEventReceiver;
+import messaging.models.Event;
 
 public class RabbitMqListener {
 

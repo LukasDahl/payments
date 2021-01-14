@@ -4,6 +4,9 @@
 
 package payments.rest.api;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -11,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import bankservice.BankServiceException_Exception;
 import payments.businesslogic.Interfaces.IPaymentService;
 import payments.businesslogic.exceptions.DtuPaySystemException;
 import payments.businesslogic.exceptions.MerchantNotFound;
@@ -34,14 +38,14 @@ public class PaymentsResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPayment(CreatePaymentRequest createPaymentRequest)
-            throws MerchantNotFound, TokenNotFound, TokenAlreadyUsed, DtuPaySystemException, QueueException {
+    public Response createPayment(CreatePaymentRequest createPaymentRequest) throws MerchantNotFound, TokenNotFound,
+            TokenAlreadyUsed, DtuPaySystemException, QueueException, BankServiceException_Exception {
 
         try {
             // TODO: add request validation
 
-            Payment payment = new Payment(createPaymentRequest.Amount, createPaymentRequest.Token,
-                    createPaymentRequest.MerchantId, createPaymentRequest.Description);
+            Payment payment = new Payment(new BigDecimal(createPaymentRequest.Amount, MathContext.DECIMAL64),
+                    createPaymentRequest.Token, createPaymentRequest.MerchantId, createPaymentRequest.Description);
 
             paymentService.createPayment(payment);
 
@@ -66,7 +70,12 @@ public class PaymentsResource {
                     .build();
 
         } catch (QueueException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorModel("queue error")).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorModel("DTUPay system error (queue)")).build();
+
+        } catch (BankServiceException_Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorModel("DTUPay system error (bank)")).build();
         }
     }
 }
