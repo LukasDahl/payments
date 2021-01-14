@@ -37,22 +37,21 @@ public class PaymentService implements IPaymentService {
 
         // 1. check token and get customer account Id
         TokenInfo tokenInfo = this.queueService.validateToken(payment.Token);
-        if (tokenInfo == null) {
+        if (tokenInfo.Token == null || tokenInfo.Token.trim().isEmpty()) {
             throw new TokenNotFound("Token is unknown");
-
-            // TODO: align reponse error codes to throw the appropriate exception
-            // throw new TokenAlreadyUsed("Token is already used");
+        } else if (tokenInfo.IsUsed) {
+            throw new TokenAlreadyUsed("Token is already used");
         }
 
         // 2. check merchant and get merchant's bank account Id
         Account merchantAccount = this.queueService.validateAccount(payment.MerchantId);
-        if (merchantAccount == null) {
+        if (merchantAccount.BankAccountId == null || merchantAccount.BankAccountId.trim().isEmpty()) {
             throw new MerchantNotFound("Merchant is unknown");
         }
 
         // 3. check customer and get customer's bank account Id
         Account customerAccount = this.queueService.validateAccount(tokenInfo.CustomerId);
-        if (customerAccount == null) {
+        if (customerAccount.BankAccountId == null || customerAccount.BankAccountId.trim().isEmpty()) {
             throw new DtuPaySystemException("Data inconsistency: customer not found!");
         }
 

@@ -52,7 +52,6 @@ public class QueueService implements IEventReceiver, IQueueService {
         } catch (Exception e) {
             throw new QueueException("Error while validating token");
         }
-
         return tokenInfoResult.join();
     }
 
@@ -60,14 +59,12 @@ public class QueueService implements IEventReceiver, IQueueService {
     public Account validateAccount(String accountId) throws QueueException {
 
         Event event = new Event(VALIDATE_ACCOUNT_CMD, accountId);
-
         accountResult = new CompletableFuture<Account>();
         try {
             eventSender.sendEvent(event, EXCHANGE_NAME, QUEUE_TYPE, ACCOUNT_CMD_BASE + VALIDATE_ACCOUNT_CMD);
         } catch (Exception e) {
             throw new QueueException("Error while validating account");
         }
-
         return accountResult.join();
     }
 
@@ -75,7 +72,6 @@ public class QueueService implements IEventReceiver, IQueueService {
     public void publishTransactionCreatedEvent(Transaction transaction) throws QueueException {
 
         Event event = new Event(TRANSACTION_CREATED_EVENT, transaction);
-
         try {
             eventSender.sendEvent(event, EXCHANGE_NAME, QUEUE_TYPE, PAYMENT_EVENT_BASE + TRANSACTION_CREATED_EVENT);
         } catch (Exception e) {
