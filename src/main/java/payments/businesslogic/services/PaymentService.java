@@ -37,7 +37,7 @@ public class PaymentService implements IPaymentService {
 
         // 1. check token and get customer account Id
         TokenInfo tokenInfo = this.queueService.validateToken(payment.Token);
-        if (tokenInfo.Token == null || tokenInfo.Token.trim().isEmpty()) {
+        if (tokenInfo.CustomerId == null || tokenInfo.CustomerId.trim().isEmpty()) {
             throw new TokenNotFound("Token is unknown");
         } else if (tokenInfo.IsUsed) {
             throw new TokenAlreadyUsed("Token is already used");

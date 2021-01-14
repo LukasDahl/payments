@@ -6,6 +6,6 @@
 
 set -e
 
-./mvnw package -Dquarkus.package.type=uber-jar
+mvn clean package
 
 docker build -t payments .
