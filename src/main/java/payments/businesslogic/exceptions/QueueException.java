@@ -4,14 +4,14 @@
 
 package payments.businesslogic.exceptions;
 
-public class DtuPaySystemError extends Exception {
+public class QueueException extends Exception {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    public DtuPaySystemError(String message) {
+    public QueueException(String message) {
         super(message);
     }
 }

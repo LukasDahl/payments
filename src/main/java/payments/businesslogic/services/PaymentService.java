@@ -7,8 +7,9 @@ package payments.businesslogic.services;
 import payments.businesslogic.Interfaces.IBankService;
 import payments.businesslogic.Interfaces.IPaymentService;
 import payments.businesslogic.Interfaces.IQueueService;
-import payments.businesslogic.exceptions.DtuPaySystemError;
+import payments.businesslogic.exceptions.DtuPaySystemException;
 import payments.businesslogic.exceptions.MerchantNotFound;
+import payments.businesslogic.exceptions.QueueException;
 import payments.businesslogic.exceptions.TokenAlreadyUsed;
 import payments.businesslogic.exceptions.TokenNotFound;
 import payments.businesslogic.models.Account;
@@ -19,64 +20,53 @@ import payments.repository.IPaymentRepository;
 
 public class PaymentService implements IPaymentService {
 
-    private IBankService _bankService;
-    private IQueueService _queueService;
-    private IPaymentRepository _paymentRepository;
+    private IBankService bankService;
+    private IQueueService queueService;
+    private IPaymentRepository paymentRepository;
 
     public PaymentService(IPaymentRepository paymentRepository, IBankService bankService, IQueueService queueService) {
-        _bankService = bankService;
-        _queueService = queueService;
-        _paymentRepository = paymentRepository;
+        this.bankService = bankService;
+        this.queueService = queueService;
+        this.paymentRepository = paymentRepository;
     }
 
     @Override
     public void createPayment(Payment payment)
-            throws MerchantNotFound, TokenNotFound, DtuPaySystemError, TokenAlreadyUsed {
+            throws MerchantNotFound, TokenNotFound, DtuPaySystemException, TokenAlreadyUsed, QueueException {
 
-        // 1. validation
-        // 1.1. check merchant
-        Account merchantAccount = this._paymentRepository.getMerchantAccount(payment.MerchantId);
-        if (merchantAccount == null) {
-            throw new MerchantNotFound("Merchant is not known");
-        }
-
-        // 1.2. check token
-        TokenInfo tokenInfo = this._paymentRepository.getTokenInfo(payment.Token);
+        // 1. check token and get customer account Id
+        TokenInfo tokenInfo = this.queueService.validateToken(payment.Token);
         if (tokenInfo == null) {
-            throw new TokenNotFound("Token is not known");
+            throw new TokenNotFound("Token is unknown");
+
+            // TODO: align reponse error codes to throw the appropriate exception
+            // throw new TokenAlreadyUsed("Token is already used");
         }
 
-        // 1.3. check if token is already used
-        if (tokenInfo.IsUsed) {
-            throw new TokenAlreadyUsed("Token is already used");
+        // 2. check merchant and get merchant's bank account Id
+        Account merchantAccount = this.queueService.validateAccount(payment.MerchantId);
+        if (merchantAccount == null) {
+            throw new MerchantNotFound("Merchant is unknown");
         }
 
-        // 1.4. check customer account
-        Account customerAccount = this._paymentRepository.getCustomerAccount(tokenInfo.CustomerId);
+        // 3. check customer and get customer's bank account Id
+        Account customerAccount = this.queueService.validateAccount(tokenInfo.CustomerId);
         if (customerAccount == null) {
-            throw new DtuPaySystemError("Data inconsistency: customer not found!");
+            throw new DtuPaySystemException("Data inconsistency: customer not found!");
         }
 
-        // 2. call bank
-        this._bankService.transferMoney(merchantAccount.BankAccountId, customerAccount.BankAccountId, payment.Amount,
+        // 4. call bank
+        this.bankService.transferMoney(merchantAccount.BankAccountId, customerAccount.BankAccountId, payment.Amount,
                 payment.Description);
 
-        // 3. create a transaction
+        // 5. create a transaction
         Transaction transaction = new Transaction(payment.Amount, payment.Token, merchantAccount.AccountId,
                 customerAccount.AccountId, payment.Description);
 
-        // 4. store in db
-        // 4.1. save transaction
-        this._paymentRepository.saveTransaction(transaction);
+        // 6. store transaction in db
+        this.paymentRepository.saveTransaction(transaction);
 
-        // 4.2. update token status
-        this._paymentRepository.markTokenAsUsed(tokenInfo.Token);
-
-        // 5. publish events
-        // 5.1. token used event
-        this._queueService.publishTokenUsedEvent(tokenInfo);
-
-        // 5.2. transaction created event
-        this._queueService.publishTransactionCreatedEvent(transaction);
+        // 7. publish transaction created event
+        this.queueService.publishTransactionCreatedEvent(transaction);
     }
 }
