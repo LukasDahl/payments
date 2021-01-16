@@ -45,23 +45,23 @@ public class PaymentService implements IPaymentService {
 
         // 2. check merchant and get merchant's bank account Id
         Account merchantAccount = this.queueService.validateAccount(payment.MerchantId);
-        if (merchantAccount.BankAccountId == null || merchantAccount.BankAccountId.trim().isEmpty()) {
+        if (merchantAccount.bankAccountId == null || merchantAccount.bankAccountId.trim().isEmpty()) {
             throw new MerchantNotFound("Merchant is unknown");
         }
 
         // 3. check customer and get customer's bank account Id
         Account customerAccount = this.queueService.validateAccount(tokenInfo.CustomerId);
-        if (customerAccount.BankAccountId == null || customerAccount.BankAccountId.trim().isEmpty()) {
+        if (customerAccount.bankAccountId == null || customerAccount.bankAccountId.trim().isEmpty()) {
             throw new DtuPaySystemException("Data inconsistency: customer not found!");
         }
 
         // 4. call bank
-        this.bankService.transferMoneyFromTo(customerAccount.BankAccountId, merchantAccount.BankAccountId,
+        this.bankService.transferMoneyFromTo(customerAccount.bankAccountId, merchantAccount.bankAccountId,
                 payment.Amount, payment.Description);
 
         // 5. create a transaction
-        Transaction transaction = new Transaction(payment.Amount, payment.Token, merchantAccount.AccountId,
-                customerAccount.AccountId, payment.Description);
+        Transaction transaction = new Transaction(payment.Amount, payment.Token, merchantAccount.id, customerAccount.id,
+                payment.Description);
 
         // 6. store transaction in db
         this.paymentRepository.saveTransaction(transaction);

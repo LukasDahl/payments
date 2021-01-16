@@ -5,11 +5,11 @@
 package payments.businesslogic.models;
 
 public class Account {
-    public String AccountId;
-    public String BankAccountId;
+    public String id;
+    public String bankAccountId;
 
-    public Account(String accountId, String bankAccountId) {
-        AccountId = accountId;
-        BankAccountId = bankAccountId;
+    public Account(String id, String bankAccountId) {
+        this.id = id;
+        this.bankAccountId = bankAccountId;
     }
 }
