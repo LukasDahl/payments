@@ -7,6 +7,7 @@ package payments.rest.api;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -42,27 +43,33 @@ public class PaymentsResource {
             TokenAlreadyUsed, DtuPaySystemException, QueueException, BankServiceException_Exception {
 
         try {
-            // TODO: add request validation
+            createPaymentRequest.validate();
 
-            Payment payment = new Payment(new BigDecimal(createPaymentRequest.Amount, MathContext.DECIMAL64),
-                    createPaymentRequest.Token, createPaymentRequest.MerchantId, createPaymentRequest.Description);
+            Payment payment = new Payment(new BigDecimal(createPaymentRequest.getAmount(), MathContext.DECIMAL64),
+                    createPaymentRequest.getToken(), createPaymentRequest.getMerchantId(),
+                    createPaymentRequest.getDescription());
 
             paymentService.createPayment(payment);
 
             return Response.ok().build();
 
+        } catch (ValidationException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorModel(e.getMessage())).build();
+
         } catch (MerchantNotFound e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(
-                    new ErrorModel(String.format("merchant with id %s is unknown", createPaymentRequest.MerchantId)))
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorModel(
+                            String.format("merchant with id %s is unknown", createPaymentRequest.getMerchantId())))
                     .build();
 
         } catch (TokenNotFound e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorModel(String.format("token %s is unknown", createPaymentRequest.Token))).build();
+                    .entity(new ErrorModel(String.format("token %s is unknown", createPaymentRequest.getToken())))
+                    .build();
 
         } catch (TokenAlreadyUsed e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new ErrorModel(String.format("token %s is already used", createPaymentRequest.Token)))
+                    .entity(new ErrorModel(String.format("token %s is already used", createPaymentRequest.getToken())))
                     .build();
 
         } catch (DtuPaySystemException e) {

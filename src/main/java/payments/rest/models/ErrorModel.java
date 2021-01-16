@@ -5,9 +5,17 @@
 package payments.rest.models;
 
 public class ErrorModel {
-    public String Message;
+    private String message;
 
     public ErrorModel(String message) {
-        Message = message;
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
