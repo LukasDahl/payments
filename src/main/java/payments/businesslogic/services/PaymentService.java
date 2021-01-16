@@ -51,8 +51,6 @@ public class PaymentService implements IPaymentService {
 
         // 3. check customer and get customer's bank account Id
         Account customerAccount = this.queueService.validateAccount(tokenInfo.CustomerId);
-        System.out.println(customerAccount.AccountId);
-        System.out.println(customerAccount.BankAccountId);
         if (customerAccount.BankAccountId == null || customerAccount.BankAccountId.trim().isEmpty()) {
             throw new DtuPaySystemException("Data inconsistency: customer not found!");
         }

@@ -1,4 +1,4 @@
-package behaviourtests;
+package unittests;
 
 import io.cucumber.junit.platform.engine.Cucumber;
 

@@ -1,4 +1,4 @@
-package behaviourtests;
+package unittests;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +57,6 @@ public class PaymentServiceSteps {
 
     @Before
     public void initialization() {
-        System.out.println("called");
         initLocalVars();
     }
 
