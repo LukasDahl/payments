@@ -7,15 +7,47 @@ package payments.businesslogic.models;
 import java.math.BigDecimal;
 
 public class Payment {
-    public String Token;
-    public BigDecimal Amount;
-    public String MerchantId;
-    public String Description;
+    private String token;
+    private BigDecimal amount;
+    private String merchantId;
+    private String description;
 
     public Payment(BigDecimal amount, String token, String merchantId, String description) {
-        Token = token;
-        Amount = amount;
-        MerchantId = merchantId;
-        Description = description;
+        this.token = token;
+        this.amount = amount;
+        this.merchantId = merchantId;
+        this.description = description;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public BigDecimal getAmount() {
+        return this.amount;
+    }
+
+    public String getMerchantId() {
+        return this.merchantId;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public void setDescriptionId(String description) {
+        this.description = description;
     }
 }

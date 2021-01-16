@@ -36,32 +36,32 @@ public class PaymentService implements IPaymentService {
             TokenAlreadyUsed, QueueException, BankServiceException_Exception {
 
         // 1. check token and get customer account Id
-        TokenInfo tokenInfo = this.queueService.validateToken(payment.Token);
-        if (tokenInfo.CustomerId == null || tokenInfo.CustomerId.trim().isEmpty()) {
+        TokenInfo tokenInfo = this.queueService.validateToken(payment.getToken());
+        if (tokenInfo.getCustomerId() == null || tokenInfo.getCustomerId().trim().isEmpty()) {
             throw new TokenNotFound("Token is unknown");
-        } else if (tokenInfo.IsUsed) {
+        } else if (tokenInfo.getIsUsed()) {
             throw new TokenAlreadyUsed("Token is already used");
         }
 
         // 2. check merchant and get merchant's bank account Id
-        Account merchantAccount = this.queueService.validateAccount(payment.MerchantId);
-        if (merchantAccount.bankAccountId == null || merchantAccount.bankAccountId.trim().isEmpty()) {
+        Account merchantAccount = this.queueService.validateAccount(payment.getMerchantId());
+        if (merchantAccount.getBankAccountId() == null || merchantAccount.getBankAccountId().trim().isEmpty()) {
             throw new MerchantNotFound("Merchant is unknown");
         }
 
         // 3. check customer and get customer's bank account Id
-        Account customerAccount = this.queueService.validateAccount(tokenInfo.CustomerId);
-        if (customerAccount.bankAccountId == null || customerAccount.bankAccountId.trim().isEmpty()) {
+        Account customerAccount = this.queueService.validateAccount(tokenInfo.getCustomerId());
+        if (customerAccount.getBankAccountId() == null || customerAccount.getBankAccountId().trim().isEmpty()) {
             throw new DtuPaySystemException("Data inconsistency: customer not found!");
         }
 
         // 4. call bank
-        this.bankService.transferMoneyFromTo(customerAccount.bankAccountId, merchantAccount.bankAccountId,
-                payment.Amount, payment.Description);
+        this.bankService.transferMoneyFromTo(customerAccount.getBankAccountId(), merchantAccount.getBankAccountId(),
+                payment.getAmount(), payment.getDescription());
 
         // 5. create a transaction
-        Transaction transaction = new Transaction(payment.Amount, payment.Token, merchantAccount.id, customerAccount.id,
-                payment.Description);
+        Transaction transaction = new Transaction(payment.getAmount(), payment.getToken(), merchantAccount.getId(),
+                customerAccount.getId(), payment.getDescription());
 
         // 6. store transaction in db
         this.paymentRepository.saveTransaction(transaction);
