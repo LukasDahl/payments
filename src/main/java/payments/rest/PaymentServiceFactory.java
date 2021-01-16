@@ -20,10 +20,8 @@ public class PaymentServiceFactory {
     private static final String QUEUE_TYPE = "topic";
     private static final String EXCHANGE_NAME = "paymentsExchange";
 
-    // Testing
-    private static final String ALL_EVENT = "*.events.*";
-    // private static final String TOKEN_EVENT_BASE = "token.events.*";
-    // private static final String ACCOUNT_EVENT_BASE = "account.events.*";
+    private static final String TOKEN_EVENTS = "token.events.*";
+    private static final String ACCOUNT_EVENTS = "account.events.*";
 
     public IPaymentService getService() {
 
@@ -39,7 +37,8 @@ public class PaymentServiceFactory {
 
         RabbitMqListener r = new RabbitMqListener(queueService);
         try {
-            r.listen(EXCHANGE_NAME, QUEUE_TYPE, ALL_EVENT);
+            r.listen(EXCHANGE_NAME, QUEUE_TYPE, TOKEN_EVENTS);
+            r.listen(EXCHANGE_NAME, QUEUE_TYPE, ACCOUNT_EVENTS);
         } catch (Exception e) {
             throw new Error(e);
         }

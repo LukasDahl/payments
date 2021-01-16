@@ -82,7 +82,7 @@ public class PaymentsResource {
 
         } catch (BankServiceException_Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorModel("DTUPay system error (bank)")).build();
+                    .entity(new ErrorModel(String.format("DTUPay system error (bank): %s", e.getMessage()))).build();
         }
     }
 }
