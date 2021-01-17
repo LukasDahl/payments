@@ -30,12 +30,12 @@ public class PaymentServiceFactory {
         }
 
         BankService bankService = new BankServiceService().getBankServicePort();
-        QueueService queueService = new QueueService(new RabbitMqSender());
+        QueueService queueService = new QueueService(new RabbitMqSender("rabbitMq"));
         IPaymentRepository paymentRepository = new InMemoryPaymentRepository();
 
         paymentService = new PaymentService(paymentRepository, bankService, queueService);
 
-        RabbitMqListener r = new RabbitMqListener(queueService);
+        RabbitMqListener r = new RabbitMqListener(queueService, "rabbitMq");
         try {
             r.listen(EXCHANGE_NAME, QUEUE_TYPE, TOKEN_EVENTS);
             r.listen(EXCHANGE_NAME, QUEUE_TYPE, ACCOUNT_EVENTS);

@@ -15,20 +15,23 @@ import messaging.models.Event;
 
 public class RabbitMqListener {
 
-    // private static final String EXCHANGE_NAME = "eventsExchange";
-    // private static final String QUEUE_TYPE = "topic";
-    // private static final String TOPIC = "events";
-
+    String hostname;
     IEventReceiver eventReceiver;
 
-    public RabbitMqListener(IEventReceiver eventReceiver) {
+    public RabbitMqListener(IEventReceiver eventReceiver, String hostname) {
+        this.hostname = hostname;
         this.eventReceiver = eventReceiver;
     }
 
     public void listen(String exchangeName, String queueType, String topic) throws Exception {
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("rabbitMq");
+        factory.setHost(this.hostname);
+        if (this.hostname == "localhost") {
+            factory.setPort(5672);
+            factory.setUsername("guest");
+            factory.setPassword("guest");
+        }
 
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();

@@ -2,10 +2,9 @@
 
 ## payment
 
-1. refactorings (java namings and style)
-2. service tests
-3. get endpoint
-4. refund payment
+1. service tests
+2. get endpoint
+3. refund payment
 
 ## system test
 1. start simulators

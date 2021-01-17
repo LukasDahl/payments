@@ -6,6 +6,14 @@
 
 set -e
 
-mvn clean package
+mvn clean package -Dmaven.test.skip=true
 
 docker build -t payments .
+
+docker-compose up -d --build
+
+sleep 10s
+
+mvn test
+
+docker-compose down
