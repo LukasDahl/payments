@@ -10,4 +10,6 @@ public interface IPaymentRepository {
 
     void saveTransaction(Transaction transaction);
 
+    Transaction getTransaction(String id);
+
 }

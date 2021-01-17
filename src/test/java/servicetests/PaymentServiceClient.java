@@ -29,8 +29,7 @@ public class PaymentServiceClient {
         Response response = baseUrl.path("payments").request()
                 .post(Entity.entity(createPaymentRequest, MediaType.APPLICATION_JSON));
 
-        System.out.println(response.getStatus());
-        if (response.getStatus() == 200) {
+        if (response.getStatus() == 201) {
             return null;
         } else {
             var error = response.readEntity(ErrorModel.class);

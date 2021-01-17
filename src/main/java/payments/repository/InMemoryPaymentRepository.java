@@ -21,4 +21,9 @@ public class InMemoryPaymentRepository implements IPaymentRepository {
     public void saveTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
+
+    @Override
+    public Transaction getTransaction(String id) {
+        return transactions.stream().filter(transaction -> transaction.getId().equals(id)).findFirst().orElse(null);
+    }
 }

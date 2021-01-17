@@ -6,6 +6,8 @@ package payments.rest.api;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -30,7 +32,7 @@ import payments.rest.models.ErrorModel;
 @Path("/payments")
 public class PaymentsResource {
 
-    private static IPaymentService paymentService;
+    private IPaymentService paymentService;
 
     public PaymentsResource() {
         paymentService = new PaymentServiceFactory().getService();
@@ -39,8 +41,9 @@ public class PaymentsResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createPayment(CreatePaymentRequest createPaymentRequest) throws MerchantNotFound, TokenNotFound,
-            TokenAlreadyUsed, DtuPaySystemException, QueueException, BankServiceException_Exception {
+    public Response createPayment(CreatePaymentRequest createPaymentRequest)
+            throws MerchantNotFound, TokenNotFound, TokenAlreadyUsed, DtuPaySystemException, QueueException,
+            BankServiceException_Exception, URISyntaxException {
 
         try {
             createPaymentRequest.validate();
@@ -49,9 +52,9 @@ public class PaymentsResource {
                     createPaymentRequest.getToken(), createPaymentRequest.getMerchantId(),
                     createPaymentRequest.getDescription());
 
-            paymentService.createPayment(payment);
+            var transaction = paymentService.createPayment(payment);
 
-            return Response.ok().build();
+            return Response.created(new URI(String.format("payments/%s", transaction.getId()))).build();
 
         } catch (ValidationException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorModel(e.getMessage())).build();

@@ -11,8 +11,11 @@ import payments.businesslogic.exceptions.QueueException;
 import payments.businesslogic.exceptions.TokenAlreadyUsed;
 import payments.businesslogic.exceptions.TokenNotFound;
 import payments.businesslogic.models.Payment;
+import payments.businesslogic.models.Transaction;
 
 public interface IPaymentService {
-    void createPayment(Payment payment) throws MerchantNotFound, TokenNotFound, TokenAlreadyUsed, DtuPaySystemException,
-            QueueException, BankServiceException_Exception;
+    Transaction createPayment(Payment payment) throws MerchantNotFound, TokenNotFound, TokenAlreadyUsed,
+            DtuPaySystemException, QueueException, BankServiceException_Exception;
+
+    Transaction getPayment(String id);
 }

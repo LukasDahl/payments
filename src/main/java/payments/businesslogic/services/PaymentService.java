@@ -32,7 +32,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public void createPayment(Payment payment) throws MerchantNotFound, TokenNotFound, DtuPaySystemException,
+    public Transaction createPayment(Payment payment) throws MerchantNotFound, TokenNotFound, DtuPaySystemException,
             TokenAlreadyUsed, QueueException, BankServiceException_Exception {
 
         // 1. check token and get customer account Id
@@ -68,5 +68,12 @@ public class PaymentService implements IPaymentService {
 
         // 7. publish transaction created event
         this.queueService.publishTransactionCreatedEvent(transaction);
+
+        return transaction;
+    }
+
+    @Override
+    public Transaction getPayment(String id) {
+        return this.paymentRepository.getTransaction(id);
     }
 }

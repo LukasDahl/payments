@@ -17,7 +17,7 @@ import payments.rest.models.ErrorModel;
 public class PaymentServiceSteps {
 
     String token, merchantId, description;
-    ErrorModel error;
+    ErrorModel errorResult;
 
     PaymentServiceClient paymentServiceClient;
     TestQueueClient testQueueClient;
@@ -44,21 +44,21 @@ public class PaymentServiceSteps {
 
     @When("the merchant initiates a payment for {int} kr by the customer")
     public void theMerchantInitiatesAPaymentForKrByTheCustomer(int amount) {
-        this.error = paymentServiceClient.createPayment(amount, this.token, this.merchantId, this.description);
+        this.errorResult = paymentServiceClient.createPayment(amount, this.token, this.merchantId, this.description);
     }
 
     @Then("the payment is successful")
     public void thePaymentIsSuccessful() {
-        assertNull(this.error);
+        assertNull(this.errorResult);
     }
 
     @Then("the payment is not successful")
     public void thePaymentIsNotSuccessful() {
-        assertNotNull(this.error);
+        assertNotNull(this.errorResult);
     }
 
     @And("the error message should say {string}")
     public void theErrorMessageShouldSay(String message) {
-        assertEquals(message, this.error.getMessage());
+        assertEquals(message, this.errorResult.getMessage());
     }
 }

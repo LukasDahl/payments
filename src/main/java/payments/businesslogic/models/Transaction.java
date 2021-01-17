@@ -17,6 +17,9 @@ public class Transaction {
     private String description;
     private LocalDateTime time;
 
+    public Transaction() {
+    }
+
     public Transaction(BigDecimal amount, String token, String merchantId, String customerId, String description) {
         this.id = UUID.randomUUID().toString();
         this.token = token;
