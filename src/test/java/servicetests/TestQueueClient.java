@@ -24,10 +24,10 @@ public class TestQueueClient implements IEventReceiver {
     private static final String USED_TOKEN = "usedToken";
 
     private static final String CUSTOMER_ID = "cid1";
-    private static final String CUSTOMER_BANK_ACCOUNT_ID = "77f3674a-3515-4c2e-b5c3-067c8f09f9b3";
+    private String CUSTOMER_BANK_ACCOUNT_ID;
 
     private static final String MERCHANT_ID = "validMerchantId1";
-    private static final String MERCHANT_BANK_ACCOUNT_ID = "f2f2e491-26c8-4e86-b084-d2faf560bcdb";
+    private String MERCHANT_BANK_ACCOUNT_ID;
 
     IEventSender sender;
 
@@ -42,6 +42,14 @@ public class TestQueueClient implements IEventReceiver {
         } catch (Exception e) {
             throw new Error(e);
         }
+    }
+
+    public void setMerchantBankAccountId(String merchantBankAccountId) {
+        this.MERCHANT_BANK_ACCOUNT_ID = merchantBankAccountId;
+    }
+
+    public void setCustomerBankAccountId(String customerBankAccountId) {
+        this.CUSTOMER_BANK_ACCOUNT_ID = customerBankAccountId;
     }
 
     @Override
@@ -72,9 +80,9 @@ public class TestQueueClient implements IEventReceiver {
             Event e = new Event("accountValidated", new Account(accountId, ""));
 
             if (accountId.equals(CUSTOMER_ID)) {
-                e = new Event("accountValidated", new Account(accountId, CUSTOMER_BANK_ACCOUNT_ID));
+                e = new Event("accountValidated", new Account(accountId, this.CUSTOMER_BANK_ACCOUNT_ID));
             } else if (accountId.equals(MERCHANT_ID)) {
-                e = new Event("accountValidated", new Account(accountId, MERCHANT_BANK_ACCOUNT_ID));
+                e = new Event("accountValidated", new Account(accountId, this.MERCHANT_BANK_ACCOUNT_ID));
             }
 
             sender.sendEvent(e, EXCHANGE_NAME, QUEUE_TYPE, "account.events.accountValidated");

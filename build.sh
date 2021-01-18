@@ -10,9 +10,11 @@ mvn clean package -Dmaven.test.skip=true
 
 docker build -t payments .
 
-docker-compose up -d --build
+docker-compose up -d rabbitMq
 
-sleep 10s
+sleep 20s
+
+docker-compose up -d payments
 
 mvn test
 
