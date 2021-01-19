@@ -12,7 +12,7 @@ docker build -t payments .
 
 docker-compose up -d rabbitMq
 
-sleep 20s
+sleep 40s
 
 docker-compose up -d payments
 
